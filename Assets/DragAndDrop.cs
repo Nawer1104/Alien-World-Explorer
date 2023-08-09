@@ -10,6 +10,8 @@ public class DragAndDrop : MonoBehaviour
 
     public static bool mouseButtonReleased;
 
+    [SerializeField] GameObject particleVFX;
+
     private void OnMouseDown()
     {
         _dragging = true;
@@ -26,9 +28,17 @@ public class DragAndDrop : MonoBehaviour
         transform.position = mousePosition - _offset;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        _dragging = false;
+        //_dragging = false;
+
+        if (collision.gameObject.tag == "Currency")
+        {
+            GameManager.Instance.currency_number.Remove(collision.gameObject);
+            Destroy(collision.gameObject);
+            GameObject explosion = Instantiate(particleVFX, transform.position, transform.rotation);
+            Destroy(explosion, .75f);
+        }
     }
 
     private void OnMouseUp()
